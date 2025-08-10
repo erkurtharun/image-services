@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  image-processing-api:
+    build:
+      context: .
+      dockerfile: image-processing-api/Dockerfile
+    image: gardrops/image-processing-api:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      STORAGE_BASEPATH: /data/images
+    volumes:
+      - images-data:/data/images
+    expose:
+      - "8081"
+    depends_on:
+      - redis
+
+  image-upload-api:
+    build:
+      context: .
+      dockerfile: image-upload-api/Dockerfile
+    image: gardrops/image-upload-api:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      GARDROPS_PROCESSING_BASEURL: http://image-processing-api:8081
+    ports:
+      - "8080:8080"
+    depends_on:
+      - image-processing-api
+      - redis
+
+volumes:
+  images-data: {}

@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: image-upload-api
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:redis}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      database: ${SPRING_DATA_REDIS_DATABASE:0}
+      password: ${SPRING_DATA_REDIS_PASSWORD:}
+      timeout: 3s
+      lettuce:
+        pool:
+          max-active: 32
+          max-idle: 16
+          min-idle: 2
+      url: ${SPRING_DATA_REDIS_URL:redis://localhost:6379/0}
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.gardrops: INFO
+  gardrops:
+    service: ${spring.application.name}
+    environment: prod
+
+ratelimit:
+  namespace: gardrops
+  fail-open: true
+
+gardrops:
+  processing:
+    baseUrl: ${GARDROPS_PROCESSING_BASEURL:http://localhost:8081}
+  upload:
+    ttlHours: ${GARDROPS_UPLOAD_TTLHOURS:1}
+    maxImages: ${GARDROPS_UPLOAD_MAXIMAGES:10}
+    baseDir: ${GARDROPS_UPLOAD_BASEDIR:/tmp/uploads}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never

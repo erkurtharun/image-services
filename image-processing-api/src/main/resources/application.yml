@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: image-processing-api
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+
+logging:
+  level:
+    root: INFO
+    com.gardrops: INFO
+  gardrops:
+    service: ${spring.application.name}
+    environment: prod
+
+server:
+  port: 8081
+  tomcat:
+    max-http-form-post-size: 20MB
+    max-swallow-size: -1
+
+processing:
+  maxWidth: 720
+  maxHeight: 1280
+  jpegQuality: 0.9
+
+storage:
+  basePath: /data/images
+
+springdoc:
+  api-docs.path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
