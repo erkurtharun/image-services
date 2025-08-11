@@ -13,7 +13,12 @@ RUN mvn -q -DskipTests -pl image-upload-api -am dependency:go-offline
 COPY shared/src shared/src
 COPY image-upload-api/src image-upload-api/src
 
+# Run package with verbose output and ensure repackage goal
 RUN mvn -q -DskipTests -pl image-upload-api -am package
+# Verify the JAR is created correctly
+RUN ls -l /workspace/image-upload-api/target/
+# Debug: Display MANIFEST.MF contents
+RUN unzip -p /workspace/image-upload-api/target/image-upload-api-0.1.0-SNAPSHOT.jar META-INF/MANIFEST.MF || true
 
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:21-jre-jammy AS runtime
@@ -23,15 +28,11 @@ USER appuser
 
 WORKDIR /app
 
-# Spring Boot layered jar (3.x ile default)
 COPY --from=build /workspace/image-upload-api/target/*.jar /app/app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod \
     JAVA_OPTS="-XX:+UseZGC -XX:MaxRAMPercentage=75 -Dsun.net.inetaddr.ttl=60 -Djava.security.egd=file:/dev/./urandom"
 
 EXPOSE 8080
-
-# Health endpoint varsa: /actuator/health veya /actuator/ping
-# HEALTHCHECK --interval=30s --timeout=3s --start-period=20s CMD wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1
 
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]

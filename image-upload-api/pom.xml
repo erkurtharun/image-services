@@ -83,20 +83,25 @@
 
     <build>
         <plugins>
-            <!-- Kotlin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.gardrops.imageuploadapi.ImageUploadApiApplicationKt</mainClass>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
-            </plugin>
-
-            <!-- Spring Boot repackage -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.gardrops.imageuploadapi.ImageUploadApiApplicationKt</mainClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>

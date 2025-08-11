@@ -14,6 +14,10 @@ COPY shared/src shared/src
 COPY image-processing-api/src image-processing-api/src
 
 RUN mvn -q -DskipTests -pl image-processing-api -am package
+# Verify the JAR is created correctly
+RUN ls -l /workspace/image-processing-api/target/
+# Debug: Display MANIFEST.MF contents
+RUN unzip -p /workspace/image-processing-api/target/image-processing-api-0.1.0-SNAPSHOT.jar META-INF/MANIFEST.MF || true
 
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:21-jre-jammy AS runtime
