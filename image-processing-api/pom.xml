@@ -15,7 +15,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- module: shared -->
         <dependency>
             <groupId>com.gardrops</groupId>
             <artifactId>shared</artifactId>
@@ -25,6 +24,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${google.protobuf.version}</version>
         </dependency>
 
         <!-- Swagger / OpenAPI UI -->

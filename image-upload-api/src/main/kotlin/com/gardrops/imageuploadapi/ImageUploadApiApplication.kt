@@ -5,6 +5,7 @@ import com.gardrops.imageuploadapi.application.service.SessionService
 import com.gardrops.imageuploadapi.application.usecase.*
 import com.gardrops.imageuploadapi.domain.port.out.ImageProcessingPort
 import com.gardrops.imageuploadapi.domain.port.out.SessionRepository
+import com.gardrops.imageuploadapi.infrastructure.outbound.events.ImageDeletedPublisher
 import com.gardrops.imageuploadapi.infrastructure.outbound.persistence.RedisSessionRepository
 import com.gardrops.imageuploadapi.infrastructure.outbound.processing.ImageProcessingClient
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -26,8 +27,8 @@ class ImageUploadApiApplication {
     @Bean fun imageProcessingPort(props: ProcessingClientProps): ImageProcessingPort =
         ImageProcessingClient(props.baseUrl)
 
-    @Bean fun sessionService(repo: SessionRepository, port: ImageProcessingPort, props: UploadProps): SessionService =
-        SessionService(repo, port, Duration.ofHours(props.ttlHours), props.maxImages, props.baseDir)
+    @Bean fun sessionService(repo: SessionRepository, port: ImageProcessingPort, publisher: ImageDeletedPublisher, props: UploadProps): SessionService =
+        SessionService(repo, port, imageDeletedPublisher = publisher,Duration.ofHours(props.ttlHours), props.maxImages, props.baseDir)
 
     // Use case beans (interface exposure – DIP)
     @Bean fun createSession(s: SessionService): CreateSession = s

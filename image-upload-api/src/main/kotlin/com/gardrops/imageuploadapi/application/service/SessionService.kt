@@ -7,6 +7,7 @@ import com.gardrops.imageuploadapi.domain.port.out.ImageProcessingPort
 import com.gardrops.imageuploadapi.domain.port.out.SessionRepository
 import com.gardrops.shared.exception.NotFoundException
 import com.gardrops.shared.exception.ValidationException
+import com.gardrops.imageuploadapi.infrastructure.outbound.events.ImageDeletedPublisher
 import java.time.Duration
 import java.time.Instant
 import java.util.*
@@ -15,6 +16,7 @@ import kotlin.io.path.Path
 class SessionService(
     private val sessions: SessionRepository,
     private val processor: ImageProcessingPort,
+    private val imageDeletedPublisher: ImageDeletedPublisher,
     private val ttl: Duration = Duration.ofHours(1),
     private val maxImages: Int = 10,
     private val baseDir: String = "/tmp/uploads"
@@ -50,9 +52,13 @@ class SessionService(
 
     override fun delete(sessionId: UUID, imageId: UUID) {
         val s = sessions.find(sessionId) ?: throw NotFoundException("Session not found")
-        if (s.images.none { it.imageId == imageId }) throw NotFoundException("Image not in session")
+        val img = s.images.find { it.imageId == imageId } ?: throw NotFoundException("Image not in session")
+
+        // remove from session
         val updated = s.copy(images = s.images.filterNot { it.imageId == imageId })
         sessions.save(updated, Duration.between(Instant.now(), s.expiresAt).coerceAtLeast(Duration.ofSeconds(1)))
-        // Not: storage deletion responsibility could be in processing API; requirement says delete file -> would be new port call if needed.
+
+        // send delete event
+        imageDeletedPublisher.publish(sessionId, imageId, img.path)
     }
 }

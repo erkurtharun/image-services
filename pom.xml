@@ -26,6 +26,8 @@
         <jackson-kotlin-version>2.20.0-rc1</jackson-kotlin-version>
         <springdoc-openapi.version>2.8.9</springdoc-openapi.version>
         <apache.commons.pool2.version>2.12.0</apache.commons.pool2.version>
+        <google.protobuf.version>4.31.1</google.protobuf.version>
+        <grpc.version>1.74.0</grpc.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -128,6 +130,13 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Detect OS and set ${os.detected.classifier} -->
+            <plugin>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.1</version>
+                <extensions>true</extensions>
             </plugin>
         </plugins>
     </build>
