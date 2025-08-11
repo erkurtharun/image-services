@@ -29,13 +29,22 @@ class SafeFileSystemImageStorage(
 
     private fun resolveUnderBase(rel: String): Path {
         val safeRel = rel.replace("\\", "/")
-            .replace(Regex("""\.\.+"""), "")      // ../../ kırp
-            .replace(Regex("""^/+"""), "")        // baştaki / kırp
+            .replace(Regex("""\.\.+"""), "")
+            .replace(Regex("""^/+"""), "")
             .trim()
 
         val base = Path.of(props.basePath).toAbsolutePath().normalize()
         val target = base.resolve(safeRel).normalize()
         require(target.startsWith(base)) { "Invalid destination path" }
         return target
+    }
+
+    override fun delete(path: String): Boolean {
+        val target = resolveUnderBase(path)
+        return try {
+            Files.deleteIfExists(target)
+        } catch (e: Exception) {
+            false
+        }
     }
 }
