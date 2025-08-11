@@ -27,6 +27,7 @@ services:
     image: gardrops/image-upload-api:latest
     environment:
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATA_REDIS_URL: redis://redis:6379/0
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       GARDROPS_PROCESSING_BASEURL: http://image-processing-api:8081

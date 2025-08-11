@@ -9,6 +9,7 @@ spring:
 
   data:
     redis:
+      url: ${SPRING_DATA_REDIS_URL:redis://redis:6379/0}
       host: ${SPRING_DATA_REDIS_HOST:redis}
       port: ${SPRING_DATA_REDIS_PORT:6379}
       database: ${SPRING_DATA_REDIS_DATABASE:0}
@@ -19,7 +20,6 @@ spring:
           max-active: 32
           max-idle: 16
           min-idle: 2
-      url: ${SPRING_DATA_REDIS_URL:redis://localhost:6379/0}
 
 server:
   port: 8080
