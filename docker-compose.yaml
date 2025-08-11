@@ -13,8 +13,11 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       STORAGE_BASEPATH: /data/images
+      SECURITY_LOCALHOST_ONLY_ENABLED: "true"
+      SECURITY_LOCALHOST_ONLY_ALLOW_PRIVATE: "true"
+      SECURITY_LOCALHOST_ONLY_ALLOWED_CIDRS: "172.17.0.0/16"
     volumes:
-      - images-data:/data/images
+      - ./data/images:/data/images
     expose:
       - "8081"
     depends_on:

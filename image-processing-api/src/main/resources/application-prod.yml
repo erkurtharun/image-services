@@ -6,6 +6,12 @@ spring:
       max-file-size: 15MB
       max-request-size: 15MB
 
+security:
+  localhost-only:
+    enabled: true
+    allow-private: true
+    allowed-cidrs: "172.17.0.0/16"
+
 logging:
   level:
     root: INFO
