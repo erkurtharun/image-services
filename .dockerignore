@@ -1,0 +1,49 @@
+# Version control
+.git
+.gitignore
+
+# Maven build artifacts
+target/
+.mvn/
+mvnw
+mvnw.cmd
+*.jar  # Exclude any pre-built JARs (Docker will build fresh)
+
+# IDE files (IntelliJ, Eclipse, etc.)
+.idea/
+*.iml
+*.classpath
+*.project
+*.settings/
+
+# Gradle (if mixed or accidental)
+build/
+.gradle/
+
+# Logs and temp files
+*.log
+*.tmp
+temp/
+logs/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Documentation (optional, exclude if not needed in image)
+README.md
+LICENSE
+*.md
+
+# Environment files (exclude local configs)
+.env
+application-local.yml
+application-dev.properties
+
+# Docker files (self-exclude, optional)
+.dockerignore
+Dockerfile
+
+# Other common exclusions
+node_modules/  # If you have any frontend integration
+dist/
